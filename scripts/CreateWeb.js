@@ -37,16 +37,16 @@ export function create(host, website, pre, suf, ext, mostrarSite, tx, itsraw, wa
         const urlnova =
             url +
             "#" +
-            pre +
+            encodeURIComponent(pre) +
             "&(" + protocolo + ")" +
-            "_$(" + website + ")" +
-            "_%(" + ext + ")" +
+            "_$(" + encodeURIComponent(website) + ")" +
+            "_%(" + encodeURIComponent(ext) + ")" +
             "_*(" + mostrarSite + ")" +
             "_RAW(" + itsraw + ")" +
             "_WAIT(" + waitTx + ")" +
             "_TX(" + encodeURIComponent(tx) + ")" +
             "_ENDTX" +
-            suf;
+            encodeURIComponent(suf);
 
         return [true, urlnova];
 

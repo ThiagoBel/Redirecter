@@ -1,13 +1,13 @@
 <h1 id="site" hidden>Carregando...</h1>
 
 <script type="module">
-    import { get_website } from "./scripts/GetUrl.js";
     import { redirect } from "./scripts/Redirect.js";
+    import { get_website } from "./scripts/GetUrl.js";
 
-    const data = get_website();
     const text = document.getElementById("site");
 
     async function executar() {
+        const data = get_website();
         if (!data) {
             window.location.href = "criar.html";
             return;
