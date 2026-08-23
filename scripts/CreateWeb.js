@@ -1,4 +1,4 @@
-export function create(host, website, pre, suf, ext, mostrarSite, tx, itsraw) {
+export function create(host, website, pre, suf, ext, mostrarSite, tx, itsraw, waitTx) {
     try {
         if (!website || typeof website !== "string") {
             return [false, "Digite o nome do site."];
@@ -22,8 +22,8 @@ export function create(host, website, pre, suf, ext, mostrarSite, tx, itsraw) {
             return [false, "Digite apenas o nome do site. Exemplo: roblox"];
         }
 
-        if (!/^\.[a-zA-Z0-9-]+$/.test(ext)) {
-            return [false, "Extensão inválida. Exemplo: .com"];
+        if (!/^\.[a-zA-Z0-9-]+(?:\/[a-zA-Z0-9._~!$&'()*+,;=:@%-]+)*$/.test(ext)) {
+            return [false, "Extensão inválida. Exemplo: .com ou .com/sla"];
         }
 
         if (host !== "https://" && host !== "http://") {
@@ -43,6 +43,7 @@ export function create(host, website, pre, suf, ext, mostrarSite, tx, itsraw) {
             "_%(" + ext + ")" +
             "_*(" + mostrarSite + ")" +
             "_RAW(" + itsraw + ")" +
+            "_WAIT(" + waitTx + ")" +
             "_TX(" + encodeURIComponent(tx) + ")" +
             "_ENDTX" +
             suf;

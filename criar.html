@@ -28,13 +28,13 @@
                 </select>
 
                 <label for="site">Nome do site</label>
-                <input id="site" type="text" placeholder="roblox" autocomplete="off">
+                <input id="site" type="text" placeholder="sitelegal" autocomplete="on">
 
                 <label for="ext">Extensão do site</label>
-                <input id="ext" type="text" placeholder=".com" autocomplete="off" value=".com">
+                <input id="ext" type="text" placeholder=".com" autocomplete="on" value=".com">
 
                 <label for="tx">Injetar codigo javascript</label>
-                <input id="tx" type="text" placeholder="Codigo" autocomplete="off">
+                <input id="tx" type="text" placeholder="Codigo" autocomplete="on">
 
                 <div id="manual-obfuscation">
                     <label for="ofuscation_pre">Ofuscação prefixal</label>
@@ -68,6 +68,14 @@
                         <span class="slider"></span>
                     </label>
                 </div>
+                <div class="wait_tx" id="switch_peso">
+                    <span>Esperar injeção terminar para redirecionar</span>
+
+                    <label class="switch">
+                        <input id="wait_tx" type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
 
                 <button type="button" id="Criador">
                     Criar Redirect
@@ -96,6 +104,7 @@
         const x9 = document.getElementById("caguetar");
         const tx = document.getElementById("tx");
         const itsraw = document.getElementById("itsraw");
+        const waitTx = document.getElementById("wait_tx");
         const manualObfuscation = document.getElementById("manual-obfuscation");
 
         function randomString(length) {
@@ -147,7 +156,8 @@
                 ext.value,
                 x9.checked,
                 tx.value,
-                itsraw.checked
+                itsraw.checked,
+                waitTx.checked
             );
 
             if (success) {

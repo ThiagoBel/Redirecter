@@ -7,27 +7,41 @@
     const data = get_website();
     const text = document.getElementById("site");
 
-    if (data) {
+    async function executar() {
+        if (!data) {
+            window.location.href = "criar.html";
+            return;
+        }
+
         text.textContent = data.url;
 
         if (data.tx) {
             if (data.itsraw) {
-                fetch(data.tx)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Não foi possível carregar a raw.");
-                        }
+                try {
+                    const response = await fetch(data.tx);
 
-                        return response.text();
-                    })
-                    .then(code => {
+                    if (!response.ok) {
+                        throw new Error("Não foi possível carregar a raw.");
+                    }
+
+                    const code = await response.text();
+
+                    if (data.waitTx) {
+                        await eval(`(async () => { ${code} })()`);
+                    } else {
                         eval(code);
-                    })
-                    .catch(err => {
-                        console.error(err);
-                    });
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                }
+
             } else {
-                eval(data.tx);
+                if (data.waitTx) {
+                    await eval(`(async () => { ${data.tx} })()`);
+                } else {
+                    eval(data.tx);
+                }
             }
         }
 
@@ -36,7 +50,7 @@
         }
 
         redirect(data.url);
-    } else {
-        window.location.href = "criar.html";
     }
+
+    executar();
 </script>
