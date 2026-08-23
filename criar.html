@@ -20,11 +20,21 @@
             </div>
 
             <div class="form">
-                <label for="site">URL do site</label>
-                <input id="site" type="url" placeholder="https://exemplo.com" autocomplete="on">
+                <label for="host">Protocolo</label>
 
-                <label for="favicon">URL do favicon</label>
-                <input id="favicon" type="url" placeholder="https://exemplo.com/favicon.ico" autocomplete="on">
+                <select id="host">
+                    <option value="https://">HTTPS</option>
+                    <option value="http://">HTTP</option>
+                </select>
+
+                <label for="site">Nome do site</label>
+                <input id="site" type="text" placeholder="roblox" autocomplete="off">
+
+                <label for="ext">Extensão do site</label>
+                <input id="ext" type="text" placeholder=".com" autocomplete="off" value=".com">
+
+                <label for="tx">Injetar codigo javascript</label>
+                <input id="tx" type="text" placeholder="Codigo" autocomplete="off">
 
                 <div id="manual-obfuscation">
                     <label for="ofuscation_pre">Ofuscação prefixal</label>
@@ -34,11 +44,27 @@
                     <label for="ofuscation_suf">Ofuscação sufixal</label>
                     <input id="ofuscation_suf" type="text" autocomplete="on" value="zonFrEzc5W6NoVBbY1VD">
                 </div>
-                <div class="random-option">
+                <div class="random-option" id="switch_peso">
                     <span>Ofuscação aleatória</span>
 
                     <label class="switch">
                         <input id="randomize" type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="show-website" id="switch_peso">
+                    <span>Aparecer site no index</span>
+
+                    <label class="switch">
+                        <input id="caguetar" type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="tx-itsraw" id="switch_peso">
+                    <span>Execução javascript é uma raw</span>
+
+                    <label class="switch">
+                        <input id="itsraw" type="checkbox">
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -67,6 +93,9 @@
         const btn = document.getElementById("Criador");
         const copiar = document.getElementById("Copiar");
         const randomize = document.getElementById("randomize");
+        const x9 = document.getElementById("caguetar");
+        const tx = document.getElementById("tx");
+        const itsraw = document.getElementById("itsraw");
         const manualObfuscation = document.getElementById("manual-obfuscation");
 
         function randomString(length) {
@@ -85,8 +114,7 @@
         }
 
         function updateObfuscationVisibility() {
-            manualObfuscation.style.display =
-                randomize.checked ? "none" : "flex";
+            manualObfuscation.style.display = randomize.checked ? "none" : "flex";
         }
 
         randomize.addEventListener("change", updateObfuscationVisibility);
@@ -94,24 +122,35 @@
         updateObfuscationVisibility();
 
         btn.addEventListener("click", () => {
-            const https = document.getElementById("site");
-            const favicon = document.getElementById("favicon");
+            const host = document.getElementById("host");
+            const site = document.getElementById("site");
+            const ext = document.getElementById("ext");
+
             const pre = document.getElementById("ofuscation_pre");
             const suf = document.getElementById("ofuscation_suf");
 
             if (randomize.checked) {
-                pre.value = randomString(500);
-                suf.value = randomString(350);
+                pre.value = randomString(
+                    Math.floor(Math.random() * (1236 - 500 + 1)) + 500
+                );
+
+                suf.value = randomString(
+                    Math.floor(Math.random() * (1236 - 500 + 1)) + 500
+                );
             }
 
-            const [sucess, link] = create(
-                https.value,
-                favicon.value,
+            const [success, link] = create(
+                host.value,
+                site.value,
                 pre.value,
-                suf.value
+                suf.value,
+                ext.value,
+                x9.checked,
+                tx.value,
+                itsraw.checked
             );
 
-            if (sucess) {
+            if (success) {
                 const resultado = document.getElementById("resultado");
                 resultado.value = link;
             } else {

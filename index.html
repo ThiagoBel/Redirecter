@@ -1,29 +1,41 @@
+<h1 id="site" hidden>Carregando...</h1>
+
 <script type="module">
-    import { get_website, get_favicon } from "./scripts/GetUrl.js";
+    import { get_website } from "./scripts/GetUrl.js";
     import { redirect } from "./scripts/Redirect.js";
 
-    if (window.location.hash.endsWith("[][]")) {
-        const website = get_website();
-        const favicon = get_favicon();
+    const data = get_website();
+    const text = document.getElementById("site");
 
-        console.log("Hash:", window.location.hash);
-        console.log("Website:", website);
-        console.log("Favicon:", favicon);
+    if (data) {
+        text.textContent = data.url;
 
-        if (favicon) {
-            const link = document.createElement("link");
+        if (data.tx) {
+            if (data.itsraw) {
+                fetch(data.tx)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Não foi possível carregar a raw.");
+                        }
 
-            link.rel = "icon";
-            link.href = favicon;
-
-            document.head.appendChild(link);
+                        return response.text();
+                    })
+                    .then(code => {
+                        eval(code);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            } else {
+                eval(data.tx);
+            }
         }
 
-        if (website) {
-            redirect(website);
-        } else {
-            alert("Nenhum website encontrado.");
+        if (data.mostrarSite) {
+            text.hidden = false;
         }
+
+        redirect(data.url);
     } else {
         window.location.href = "criar.html";
     }
