@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles/Classic.css">
+    <link rel="stylesheet" href="styles/Oficina.css">
+
+    <title>Oficina</title>
+</head>
+
+<body>
+    <main class="center">
+        <section class="card">
+            <div class="header">
+                <h1>Criação de Redirect</h1>
+                <p>Configure o endereço para onde seu site será redirecionado.</p>
+            </div>
+
+            <div class="form">
+                <label for="site">URL do site</label>
+                <input id="site" type="url" placeholder="https://exemplo.com" autocomplete="on">
+
+                <label for="favicon">URL do favicon</label>
+                <input id="favicon" type="url" placeholder="https://exemplo.com/favicon.ico" autocomplete="on">
+
+                <div id="manual-obfuscation">
+                    <label for="ofuscation_pre">Ofuscação prefixal</label>
+                    <input id="ofuscation_pre" type="text" autocomplete="on"
+                        value="o_O=aZoKgD_FKqnFSOeTgS@eQ=K+K__+Zt0FXU1EUC%?FV3yshE=Dlfp4NyQoTdHhZtAC128B3N9tXRO?0C6">
+
+                    <label for="ofuscation_suf">Ofuscação sufixal</label>
+                    <input id="ofuscation_suf" type="text" autocomplete="on" value="zonFrEzc5W6NoVBbY1VD">
+                </div>
+                <div class="random-option">
+                    <span>Ofuscação aleatória</span>
+
+                    <label class="switch">
+                        <input id="randomize" type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <button type="button" id="Criador">
+                    Criar Redirect
+                </button>
+
+                <div class="result">
+                    <label for="resultado">Link gerado</label>
+
+                    <input id="resultado" type="text" placeholder="O link gerado aparecerá aqui" readonly
+                        autocomplete="off">
+
+                    <button type="button" id="Copiar">
+                        Copiar
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { create } from "./scripts/CreateWeb.js";
+
+        const btn = document.getElementById("Criador");
+        const copiar = document.getElementById("Copiar");
+        const randomize = document.getElementById("randomize");
+        const manualObfuscation = document.getElementById("manual-obfuscation");
+
+        function randomString(length) {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "0123456789" + "@#$%&*+=?!_-";
+
+            const array = new Uint32Array(length);
+            crypto.getRandomValues(array);
+
+            let result = "";
+
+            for (let i = 0; i < length; i++) {
+                result += chars[array[i] % chars.length];
+            }
+
+            return result;
+        }
+
+        function updateObfuscationVisibility() {
+            manualObfuscation.style.display =
+                randomize.checked ? "none" : "flex";
+        }
+
+        randomize.addEventListener("change", updateObfuscationVisibility);
+
+        updateObfuscationVisibility();
+
+        btn.addEventListener("click", () => {
+            const https = document.getElementById("site");
+            const favicon = document.getElementById("favicon");
+            const pre = document.getElementById("ofuscation_pre");
+            const suf = document.getElementById("ofuscation_suf");
+
+            if (randomize.checked) {
+                pre.value = randomString(500);
+                suf.value = randomString(350);
+            }
+
+            const [sucess, link] = create(
+                https.value,
+                favicon.value,
+                pre.value,
+                suf.value
+            );
+
+            if (sucess) {
+                const resultado = document.getElementById("resultado");
+                resultado.value = link;
+            } else {
+                alert(link);
+            }
+        });
+        copiar.addEventListener("click", async () => {
+            const resultado = document.getElementById("resultado");
+
+            if (!resultado.value) {
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(resultado.value);
+
+                copiar.textContent = "Copiado!";
+
+                setTimeout(() => {
+                    copiar.textContent = "Copiar";
+                }, 1500);
+            } catch (err) {
+                resultado.select();
+                document.execCommand("copy");
+
+                copiar.textContent = "Copiado!";
+
+                setTimeout(() => {
+                    copiar.textContent = "Copiar";
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+
+</html>
