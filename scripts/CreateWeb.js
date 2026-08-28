@@ -22,9 +22,9 @@ export function create(host, website, pre, suf, ext, mostrarSite, tx, itsraw, wa
             return [false, "Digite apenas o nome do site. Exemplo: roblox"];
         }
 
-        if (!/^\.[a-zA-Z0-9-]+(?:\/[a-zA-Z0-9._~!$&'()*+,;=:@%-]+)*$/.test(ext)) {
-            return [false, "Extensão inválida. Exemplo: .com ou .com/sla"];
-        }
+        //if (!/^\.[a-zA-Z0-9-]+(?:\/[a-zA-Z0-9._~!$&'()*+,;=:@%-]+)*$/.test(ext)) {
+        //    return [false, "Extensão inválida. Exemplo: .com ou .com/sla"];
+        //}
 
         if (host !== "https://" && host !== "http://") {
             return [false, "Host inválido."];
